@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Bandeja de almuerzo</string>
-    <string name="back_button">Back</string>
-    <string name="cancel">Cancel</string>
-    <string name="choose_accompaniment">Choose Accompaniment</string>
-    <string name="choose_entree">Choose Entree</string>
-    <string name="choose_side_dish">Choose Side Dish</string>
-    <string name="next">Next</string>
-    <string name="order_checkout">Order Checkout</string>
-    <string name="start_order">Start Order</string>
-    <string name="order_summary">Order Summary</string>
-    <string name="subtotal">Subtotal: %s</string>
-    <string name="tax">Tax: %s</string>
-    <string name="total">Total: %s</string>
-    <string name="submit">Submit</string>
+    <string name="app_name">"Bandeja de almuerzo"</string>
+    <string name="back_button">"Atrás"</string>
+    <string name="cancel">"Cancelar"</string>
+    <string name="choose_accompaniment">"Elija acompañamiento"</string>
+    <string name="choose_entree">"Elija plato principal"</string>
+    <string name="choose_side_dish">"Elija guarnición"</string>
+    <string name="next">"Próximo"</string>
+    <string name="order_checkout">"Realizar pedido"</string>
+    <string name="start_order">"Orden de inicio"</string>
+    <string name="order_summary">"Resumen del pedido"</string>
+    <string name="subtotal">"Subtotal: %s"</string>
+    <string name="tax">"Impuesto: %s"</string>
+    <string name="total">"Total: %s"</string>
+    <string name="submit">"Entregar"</string>
 </resources>
