@@ -38,12 +38,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.example.lunchtray.datasource.DataSource
 import com.example.lunchtray.ui.AccompanimentMenuScreen
 import com.example.lunchtray.ui.CheckoutScreen
@@ -53,36 +51,48 @@ import com.example.lunchtray.ui.SideDishMenuScreen
 import com.example.lunchtray.ui.StartOrderScreen
 import kotlinx.serialization.Serializable
 
-sealed interface LunchTrayScreen {
-    @Serializable
-    data object Start : LunchTrayScreen
-
-    @Serializable
-    data object Entree : LunchTrayScreen
-
-    @Serializable
-    data object SideDish : LunchTrayScreen
-
-    @Serializable
-    data object Accompaniment : LunchTrayScreen
-
-    @Serializable
-    data object Checkout : LunchTrayScreen
+@Serializable
+sealed interface Screen {
+    @get:StringRes
+    val title: Int
 }
 
-fun LunchTrayScreen.getStringResource() = when (this) {
-    LunchTrayScreen.Start -> R.string.start_order
-    LunchTrayScreen.Entree -> R.string.choose_entree
-    LunchTrayScreen.Checkout -> R.string.order_checkout
-    LunchTrayScreen.SideDish -> R.string.choose_side_dish
-    LunchTrayScreen.Accompaniment -> R.string.choose_accompaniment
+sealed class LunchTrayScreen : Screen {
+    @Serializable
+    data class Start(override val title: Int = R.string.start_order) : LunchTrayScreen()
+
+    @Serializable
+    data object Entree : LunchTrayScreen() {
+        override val title: Int
+            get() = R.string.choose_entree
+    }
+
+    @Serializable
+    data object SideDish : LunchTrayScreen() {
+        override val title: Int
+            get() = R.string.choose_side_dish
+    }
+
+    @Serializable
+    data object Accompaniment : LunchTrayScreen() {
+        override val title: Int
+            get() = R.string.choose_accompaniment
+    }
+
+    @Serializable
+    data object Checkout : LunchTrayScreen() {
+        override val title: Int
+            get() = R.string.order_checkout
+    }
 }
+
 
 fun NavBackStackEntry?.fromRoute(): LunchTrayScreen {
     this?.destination?.route?.substringBefore("?")?.substringBefore("/")
-        ?.substringAfterLast(".")?.let { println("the new class $it")
+        ?.substringAfterLast(".")?.let {
+            println("the new class $it")
             when (it) {
-                LunchTrayScreen.Start::class.simpleName -> return LunchTrayScreen.Start
+                LunchTrayScreen.Start::class.simpleName -> return LunchTrayScreen.Start()
                 LunchTrayScreen.Entree::class.simpleName -> return LunchTrayScreen.Entree
                 LunchTrayScreen.SideDish::class.simpleName -> return LunchTrayScreen.SideDish
                 LunchTrayScreen.Accompaniment::class.simpleName -> return LunchTrayScreen.Accompaniment
@@ -90,7 +100,7 @@ fun NavBackStackEntry?.fromRoute(): LunchTrayScreen {
                 else -> LunchTrayScreen.Start
             }
         }
-    return LunchTrayScreen.Start
+    return LunchTrayScreen.Start()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,7 +112,7 @@ fun AppBar(
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        title = { Text(stringResource(id = currentScreen.getStringResource())) },
+        title = { Text(stringResource(id = currentScreen.title)) },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
@@ -139,7 +149,7 @@ fun LunchTrayApp() {
 
         NavHost(
             navController = navController,
-            startDestination = LunchTrayScreen.Start,
+            startDestination = LunchTrayScreen.Start(),
             modifier = Modifier.padding(innerPadding)
         ) {
             composable<LunchTrayScreen.Start> {
@@ -224,6 +234,6 @@ fun cancelLunchAndNavigateToStart(
     navController: NavController, viewModel: OrderViewModel
 ) {
     viewModel.resetOrder()
-    navController.popBackStack(LunchTrayScreen.Start, inclusive = false)
+    navController.popBackStack(LunchTrayScreen.Start(), inclusive = false)
 }
 
